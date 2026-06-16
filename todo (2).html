@@ -1,3 +1,33 @@
+None selected 
+
+
+Skip to content
+Using Gmail with screen readers
+1 of 7
+(no subject)
+Inbox
+
+Zach Ellenhorn
+Attachments
+10:37 AM (0 minutes ago)
+to me
+
+
+Capital One
+Zach Ellenhorn
+
+Manager • Product Management
+Card, Card Data
+(631) 205-4226 • 11 West 19th Street
+
+
+The information contained in this e-mail may be confidential and/or proprietary to Capital One and/or its affiliates and may only be used solely in performance of work or services for Capital One. The information transmitted herewith is intended only for use by the individual or entity to which it is addressed. If the reader of this message is not the intended recipient, you are hereby notified that any review, retransmission, dissemination, distribution, copying or other use of, or taking of any action in reliance upon this information is strictly prohibited. If you have received this communication in error, please contact the sender and delete the material from your computer.
+
+
+
+
+ One attachment
+  •  Scanned by Gmail
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2325,10 +2355,17 @@
 
     function attachFirebaseListener() {
       if (!firebaseRef) return;
-      if (syncListener) syncListener();  // detach any previous listener
+      if (syncListener) {
+        firebaseRef.off('value', syncListener);
+        syncListener = null;
+      }
       syncListener = firebaseRef.on('value', snapshot => {
         const remote = snapshot.val();
-        if (!remote || !remote.tasks || !remote.categories) return;
+        if (!remote || !remote.tasks || !remote.categories) {
+          // Nothing in Firebase yet — push local state up
+          syncPush();
+          lastSyncOk = true; updateSyncBtn(); return;
+        }
 
         remote.tasks = deduplicateTasks(normalizeTasks(remote.tasks));
 
@@ -2338,12 +2375,15 @@
 
         const remoteTs = remote.lastModified ?? 0;
         const localTs  = state.lastModified  ?? 0;
+
         if (remoteTs < localTs) {
+          // Local is newer — push up, don't overwrite local
           lastSyncOk = true; updateSyncBtn();
           syncPush();
           return;
         }
 
+        // Remote is newer — accept it
         state = { ...remote, tasks: remote.tasks };
         localStorage.setItem('todo-state', JSON.stringify(state));
         frozenOrder = null;
@@ -2435,7 +2475,6 @@
         localStorage.setItem('firebase-config', JSON.stringify(config));
         lastSyncOk = true;
         attachFirebaseListener();
-        syncPush();
         closeSyncModal();
         updateSyncBtn();
       } catch (e) {
@@ -2555,3 +2594,5 @@
   </script>
 </body>
 </html>
+todo.html
+Displaying todo.html.
