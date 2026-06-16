@@ -5,26 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="screen-orientation" content="portrait">
   <title>To-Do List</title>
   <style>
-    /* Lock to portrait on mobile — rotate content back if device is held landscape */
-    @media (orientation: landscape) and (max-width: 1024px) {
-      html {
-        transform: rotate(-90deg);
-        transform-origin: left top;
-        width: 100vh;
-        height: 100vw;
-        overflow-x: hidden;
-        position: absolute;
-        top: 100%;
-        left: 0;
-      }
-    }
     :root {
       --priority-high: #e53935;
       --priority-medium: #f5a623;
       --priority-low: #4f6ef7;
+
+      /* Light mode tokens */
+      --bg:           #f0f2f5;
+      --surface:      #fff;
+      --border:       #dde1e7;
+      --text:         #2d2d2d;
+      --text-muted:   #888;
+      --text-heading: #2d3a5c;
+      --sidebar-bg:   #2d3a5c;
+      --sidebar-text: #d6e0f5;
+      --sidebar-muted:#9badd4;
+      --sidebar-hover:#3d4e72;
+      --sidebar-active:#4f6ef7;
+      --sidebar-input-bg: #3d4e72;
+      --sidebar-input-border: #4e6092;
+      --input-bg:     #fff;
+      --chip-bg:      #f4f5f8;
+    }
+
+    [data-theme="dark"] {
+      --bg:           #111827;
+      --surface:      #1f2937;
+      --border:       #374151;
+      --text:         #e5e7eb;
+      --text-muted:   #9ca3af;
+      --text-heading: #f3f4f6;
+      --sidebar-bg:   #111827;
+      --sidebar-text: #d1d5db;
+      --sidebar-muted:#6b7280;
+      --sidebar-hover:#1f2937;
+      --sidebar-active:#4f6ef7;
+      --sidebar-input-bg: #1f2937;
+      --sidebar-input-border: #374151;
+      --input-bg:     #1f2937;
+      --chip-bg:      #374151;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -66,7 +87,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f0f2f5;
+      background: var(--bg);
       display: flex;
       min-height: 100%;
       overscroll-behavior-y: contain;
@@ -76,8 +97,8 @@
     .sidebar {
       width: 260px;
       flex-shrink: 0;
-      background: #2d3a5c;
-      color: #fff;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -571,13 +592,15 @@
     /* ── Cost summary bar ── */
     .cost-summary {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-wrap: nowrap;
+      align-items: center;
       background: #fff;
       border: 1.5px solid #dde1e7;
       border-radius: 10px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       margin-bottom: 8px;
+      overflow: hidden;
     }
 
     .owner-filter-row {
@@ -607,9 +630,11 @@
     .cost-summary-item {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
+      gap: 4px;
+      font-size: 0.82rem;
       color: #444;
+      white-space: nowrap;
+      min-width: 0;
     }
 
     .cost-summary-item strong { color: #2d3a5c; }
@@ -1072,6 +1097,113 @@
       .modal-actions button { padding: 14px 20px; min-height: 52px; }
     }
 
+    /* ── Dark mode overrides ── */
+    [data-theme="dark"] body { background: var(--bg); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .data-toolbar { background: var(--sidebar-bg); border-color: #1f2937; }
+    [data-theme="dark"] .sidebar-icon-dot[title]::after { background: #374151; }
+    [data-theme="dark"] .cat-list li { color: var(--sidebar-text); }
+    [data-theme="dark"] .cat-list li:hover { background: var(--sidebar-hover); }
+    [data-theme="dark"] .cat-list li.active { background: var(--sidebar-active); }
+    [data-theme="dark"] .sidebar h2,
+    [data-theme="dark"] .sidebar-muted,
+    [data-theme="dark"] .cat-action-btn,
+    [data-theme="dark"] .add-subcat-btn,
+    [data-theme="dark"] .sidebar-toggle,
+    [data-theme="dark"] .sidebar-icon-sync { color: var(--sidebar-muted); }
+    [data-theme="dark"] .add-cat-row input {
+      background: var(--sidebar-input-bg);
+      border-color: var(--sidebar-input-border);
+      color: var(--sidebar-text);
+    }
+    [data-theme="dark"] .add-cat-row input::placeholder { color: var(--sidebar-muted); }
+    [data-theme="dark"] .data-btn {
+      background: var(--sidebar-input-bg);
+      border-color: var(--sidebar-input-border);
+      color: var(--sidebar-text);
+    }
+    [data-theme="dark"] .add-subcat-row { background: #0f172a; }
+    [data-theme="dark"] .add-subcat-row input {
+      background: var(--sidebar-input-bg);
+      border-color: var(--sidebar-input-border);
+      color: var(--sidebar-text);
+    }
+    [data-theme="dark"] .add-subcat-row .btn-subcat-cancel {
+      background: var(--sidebar-input-bg);
+      color: var(--sidebar-muted);
+    }
+    [data-theme="dark"] .main { background: var(--bg); }
+    [data-theme="dark"] .main-header h1 { color: var(--text-heading); }
+    [data-theme="dark"] .add-form {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+    [data-theme="dark"] .add-form input[type="text"],
+    [data-theme="dark"] .add-form input[type="number"],
+    [data-theme="dark"] .cost-toggle-btn,
+    [data-theme="dark"] .cost-quick-btn,
+    [data-theme="dark"] .cost-other-input {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    [data-theme="dark"] .cost-toggle-btn { color: var(--text-muted); }
+    [data-theme="dark"] .cost-row label { color: var(--text-muted); }
+    [data-theme="dark"] .cost-summary {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+    [data-theme="dark"] .cost-summary-item { color: var(--text); }
+    [data-theme="dark"] .cost-summary-item strong { color: var(--text-heading); }
+    [data-theme="dark"] .cs-divider { background: var(--border); }
+    [data-theme="dark"] .owner-filter-btn {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+    [data-theme="dark"] ul.task-list li { border-bottom-color: var(--border); }
+    [data-theme="dark"] ul.task-list li .text { color: var(--text); }
+    [data-theme="dark"] .cost-badge { background: var(--chip-bg); color: var(--text-muted); }
+    [data-theme="dark"] .btn-icon { color: #4b5563; }
+    [data-theme="dark"] .footer { color: var(--text-muted); }
+    [data-theme="dark"] .footer button { color: #f87171; }
+    [data-theme="dark"] .empty { color: #4b5563; }
+    [data-theme="dark"] .modal {
+      background: var(--surface);
+      color: var(--text);
+    }
+    [data-theme="dark"] .modal h2 { color: var(--text-heading); }
+    [data-theme="dark"] .modal label { color: var(--text-muted); }
+    [data-theme="dark"] .modal input[type="text"],
+    [data-theme="dark"] .modal input[type="number"],
+    [data-theme="dark"] .modal select,
+    [data-theme="dark"] .modal textarea {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    [data-theme="dark"] .btn-cancel { background: var(--bg); color: var(--text-muted); }
+    [data-theme="dark"] .btn-delete-modal { background: #450a0a; color: #fca5a5; }
+    [data-theme="dark"] .icon-picker-btn {
+      background: var(--bg);
+      border-color: var(--border);
+    }
+    [data-theme="dark"] .icon-picker-btn span { color: var(--text-muted); }
+    [data-theme="dark"] .cat-rename-input { color: var(--sidebar-text); border-color: var(--sidebar-muted); }
+    /* Dark mode mobile header */
+    [data-theme="dark"] .main-header {
+      background: var(--surface);
+      border-bottom-color: var(--border);
+    }
+    [data-theme="dark"] .sync-modal,
+    [data-theme="dark"] #sync-modal { background: var(--surface); }
+    [data-theme="dark"] #pantry-input,
+    [data-theme="dark"] #firebase-input {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
     /* ── Drag-to-reorder (desktop) ── */
     .cat-list li.drag-over-above { border-top: 2px solid #4f6ef7; }
     .cat-list li.drag-over-below { border-bottom: 2px solid #4f6ef7; }
@@ -1134,6 +1266,7 @@
       </div>
       <div class="data-toolbar">
         <button class="data-btn sync-btn" id="sync-btn" onclick="openSyncModal()" title="Cloud sync setup">☁ <span id="sync-label">Sync</span><span class="sync-dot" id="sync-dot"></span></button>
+        <button class="data-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle dark mode" style="margin-top:8px">☾ <span id="theme-label">Dark mode</span></button>
       </div>
     </div>
   </nav>
@@ -1192,6 +1325,10 @@
       <div>
         <label for="edit-text">Task</label>
         <input id="edit-text" type="text" maxlength="200" />
+      </div>
+      <div>
+        <label for="edit-category">List</label>
+        <select id="edit-category" style="width:100%;padding:10px 14px;border:1.5px solid #dde1e7;border-radius:8px;font-size:0.95rem;outline:none;background:#fff;color:#2d2d2d;cursor:pointer"></select>
       </div>
       <div class="modal-cost-section">
         <label>Owner</label>
@@ -1772,8 +1909,37 @@
       document.getElementById('edit-text').value = t.text;
       initEditOwner(t.owner || null);
       setEditCostState(!!t.showMoney, !!t.showTime);
+      // Populate category select
+      const sel = document.getElementById('edit-category');
+      sel.innerHTML = '';
+      const topLevel = state.categories.filter(c => !c.parentId);
+      topLevel.forEach(c => {
+        const subs = state.categories.filter(s => s.parentId === c.id);
+        if (subs.length) {
+          const group = document.createElement('optgroup');
+          group.label = c.name;
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.name + ' (all)';
+          if (t.category === c.id) opt.selected = true;
+          group.appendChild(opt);
+          subs.forEach(s => {
+            const sopt = document.createElement('option');
+            sopt.value = s.id;
+            sopt.textContent = '  ' + s.name;
+            if (t.category === s.id) sopt.selected = true;
+            group.appendChild(sopt);
+          });
+          sel.appendChild(group);
+        } else {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.name;
+          if (t.category === c.id) opt.selected = true;
+          sel.appendChild(opt);
+        }
+      });
       setTimeout(() => {
-        // Restore cost values — try to match a preset first, else put in "other" input
         if (t.showMoney && t.cost != null) restoreCostValue('edit-money', 'money', t.cost);
         if (t.showTime  && t.costTime != null) restoreCostValue('edit-time', 'time', t.costTime);
       }, 0);
@@ -1811,8 +1977,10 @@
       const text = document.getElementById('edit-text').value.trim();
       if (!text) return;
       const { cost, costTime, showMoney, showTime } = getEditCostValues();
+      const sel = document.getElementById('edit-category');
       t.text = text; t.cost = cost; t.costTime = costTime;
       t.showMoney = showMoney; t.showTime = showTime; t.owner = editOwner;
+      if (sel && sel.value) t.category = sel.value;
       save();
       closeModal();
       render();
@@ -2531,6 +2699,27 @@
       const managing = sidebar.classList.toggle('managing');
       if (btn) btn.textContent = managing ? 'Done' : 'Manage';
     }
+
+    function toggleTheme() {
+      const dark = document.documentElement.dataset.theme !== 'dark';
+      document.documentElement.dataset.theme = dark ? 'dark' : '';
+      localStorage.setItem('theme', dark ? 'dark' : '');
+      const lbl = document.getElementById('theme-label');
+      if (lbl) lbl.textContent = dark ? 'Light mode' : 'Dark mode';
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.children[0].textContent = dark ? '☀' : '☾';
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.dataset.theme = 'dark';
+        const lbl = document.getElementById('theme-label');
+        if (lbl) lbl.textContent = 'Light mode';
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.children[0].textContent = '☀';
+      }
+    })();
 
     function toggleSidebar() {
       if (window.innerWidth <= 720) return;
