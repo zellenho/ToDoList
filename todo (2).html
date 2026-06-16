@@ -1,33 +1,3 @@
-None selected 
-
-
-Skip to content
-Using Gmail with screen readers
-1 of 7
-(no subject)
-Inbox
-
-Zach Ellenhorn
-Attachments
-10:37 AM (0 minutes ago)
-to me
-
-
-Capital One
-Zach Ellenhorn
-
-Manager • Product Management
-Card, Card Data
-(631) 205-4226 • 11 West 19th Street
-
-
-The information contained in this e-mail may be confidential and/or proprietary to Capital One and/or its affiliates and may only be used solely in performance of work or services for Capital One. The information transmitted herewith is intended only for use by the individual or entity to which it is addressed. If the reader of this message is not the intended recipient, you are hereby notified that any review, retransmission, dissemination, distribution, copying or other use of, or taking of any action in reliance upon this information is strictly prohibited. If you have received this communication in error, please contact the sender and delete the material from your computer.
-
-
-
-
- One attachment
-  •  Scanned by Gmail
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,11 +48,13 @@ The information contained in this e-mail may be confidential and/or proprietary 
       .footer button:hover { text-decoration: underline; }
     }
 
+    html, body { height: 100%; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f0f2f5;
       display: flex;
-      min-height: 100vh;
+      min-height: 100%;
       overscroll-behavior-y: contain;
     }
 
@@ -909,6 +881,9 @@ The information contained in this e-mail may be confidential and/or proprietary 
       .sidebar-toggle { display: none; }
       .sidebar-icon-strip { display: none !important; }
 
+      /* Lock body scroll when overlay is open */
+      body.nav-open { overflow: hidden; }
+
       .sidebar.mobile-open {
         display: flex;
         flex-direction: column;
@@ -917,9 +892,11 @@ The information contained in this e-mail may be confidential and/or proprietary 
         left: 0; right: 0; bottom: 0;
         height: auto;
         width: 100%;
-        max-height: calc(100vh - var(--mobile-header-h, 56px));
+        /* dvh shrinks when the keyboard appears, preventing the white gap */
+        max-height: calc(100dvh - var(--mobile-header-h, 56px));
         z-index: 100;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         transition: none;
       }
 
@@ -953,10 +930,36 @@ The information contained in this e-mail may be confidential and/or proprietary 
       .sidebar.mobile-open .cat-list li.subcat { padding-left: 36px; font-size: 0.92rem; }
       .sidebar.mobile-open .cat-list li.active { background: #4f6ef7; }
 
-      /* On mobile overlay: hide action buttons and drag handle — just show icon, name, count */
+      /* On mobile overlay: hide action buttons and drag handle by default */
       .sidebar.mobile-open .drag-handle,
       .sidebar.mobile-open .cat-action-btn,
       .sidebar.mobile-open .add-subcat-btn { display: none; }
+
+      /* Show them when manage mode is active */
+      .sidebar.mobile-open.managing .drag-handle,
+      .sidebar.mobile-open.managing .cat-action-btn,
+      .sidebar.mobile-open.managing .add-subcat-btn { display: inline-flex; }
+
+      /* Manage toggle button */
+      .mobile-manage-btn {
+        display: none;
+        margin-left: auto;
+        padding: 6px 12px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 6px;
+        color: #d6e0f5;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .sidebar.mobile-open .mobile-manage-btn { display: block; }
+      .sidebar.mobile-open.managing .mobile-manage-btn {
+        background: #4f6ef7;
+        border-color: #4f6ef7;
+        color: #fff;
+      }
 
       /* Ensure name fills available space and doesn't get squeezed */
       .sidebar.mobile-open .cat-list li .cat-name { font-size: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1087,7 +1090,10 @@ The information contained in this e-mail may be confidential and/or proprietary 
     <!-- Collapsed icon strip (shown when sidebar is collapsed) -->
     <div class="sidebar-icon-strip" id="sidebar-icon-strip"></div>
     <div class="sidebar-inner">
-      <h2>Categories</h2>
+      <div style="display:flex;align-items:center;padding:0 12px 0 0">
+        <h2 style="flex:1">Categories</h2>
+        <button class="mobile-manage-btn" id="mobile-manage-btn" onclick="toggleManageMode()">Manage</button>
+      </div>
       <ul class="cat-list" id="cat-list"></ul>
       <div class="add-cat-row">
         <input id="new-cat" type="text" placeholder="New category..." maxlength="30" />
@@ -2553,20 +2559,31 @@ The information contained in this e-mail may be confidential and/or proprietary 
       const sidebar = document.getElementById('sidebar');
       const header = document.querySelector('.main-header');
       const backdrop = document.getElementById('mobile-backdrop');
-      // Measure actual header height so the overlay sits flush below it on notched devices
       const headerH = header.getBoundingClientRect().bottom;
       document.documentElement.style.setProperty('--mobile-header-h', headerH + 'px');
       const isOpen = sidebar.classList.toggle('mobile-open');
       header.classList.toggle('open', isOpen);
       backdrop.classList.toggle('open', isOpen);
+      document.body.classList.toggle('nav-open', isOpen);
+    }
+
+    function toggleManageMode() {
+      const sidebar = document.getElementById('sidebar');
+      const btn = document.getElementById('mobile-manage-btn');
+      const managing = sidebar.classList.toggle('managing');
+      if (btn) btn.textContent = managing ? 'Done' : 'Manage';
     }
 
     function closeMobileNav() {
-      document.getElementById('sidebar').classList.remove('mobile-open');
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.remove('mobile-open', 'managing');
+      const btn = document.getElementById('mobile-manage-btn');
+      if (btn) btn.textContent = 'Manage';
       const header = document.querySelector('.main-header');
       if (header) header.classList.remove('open');
       const backdrop = document.getElementById('mobile-backdrop');
       if (backdrop) backdrop.classList.remove('open');
+      document.body.classList.remove('nav-open');
     }
 
     // Restore sidebar state — collapsed by default on desktop, always expanded on mobile
@@ -2595,4 +2612,4 @@ The information contained in this e-mail may be confidential and/or proprietary 
 </body>
 </html>
 todo.html
-Displaying todo.html.
+Displaying todo.html. 
