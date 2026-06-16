@@ -1104,13 +1104,29 @@
     [data-theme="dark"] .sidebar-icon-dot[title]::after { background: #374151; }
     [data-theme="dark"] .cat-list li { color: var(--sidebar-text); }
     [data-theme="dark"] .cat-list li:hover { background: var(--sidebar-hover); }
-    [data-theme="dark"] .cat-list li.active { background: var(--sidebar-active); }
-    [data-theme="dark"] .sidebar h2,
-    [data-theme="dark"] .sidebar-muted,
-    [data-theme="dark"] .cat-action-btn,
-    [data-theme="dark"] .add-subcat-btn,
+    /* Active item: lighter blue so white text stays legible */
+    [data-theme="dark"] .cat-list li.active { background: #3b5bdb; color: #fff; }
+    [data-theme="dark"] .cat-list li.active .cat-count { background: rgba(255,255,255,0.25); }
+    [data-theme="dark"] .sidebar h2 { color: var(--sidebar-muted); }
     [data-theme="dark"] .sidebar-toggle,
     [data-theme="dark"] .sidebar-icon-sync { color: var(--sidebar-muted); }
+    /* Action buttons in sidebar — visible on dark bg */
+    [data-theme="dark"] .cat-action-btn,
+    [data-theme="dark"] .add-subcat-btn,
+    [data-theme="dark"] .move-btn { color: #9ca3af; }
+    [data-theme="dark"] .cat-action-btn.delete:hover { color: #f87171 !important; }
+    [data-theme="dark"] .add-subcat-btn:hover { color: #6ee7b7 !important; }
+    /* Manage button */
+    [data-theme="dark"] .mobile-manage-btn {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      color: #e5e7eb;
+    }
+    [data-theme="dark"] .sidebar.mobile-open.managing .mobile-manage-btn {
+      background: #4f6ef7;
+      border-color: #4f6ef7;
+      color: #fff;
+    }
     [data-theme="dark"] .add-cat-row input {
       background: var(--sidebar-input-bg);
       border-color: var(--sidebar-input-border);
@@ -1130,7 +1146,7 @@
     }
     [data-theme="dark"] .add-subcat-row .btn-subcat-cancel {
       background: var(--sidebar-input-bg);
-      color: var(--sidebar-muted);
+      color: #9ca3af;
     }
     [data-theme="dark"] .main { background: var(--bg); }
     [data-theme="dark"] .main-header h1 { color: var(--text-heading); }
@@ -1139,15 +1155,24 @@
       border-color: var(--border);
     }
     [data-theme="dark"] .add-form input[type="text"],
-    [data-theme="dark"] .add-form input[type="number"],
-    [data-theme="dark"] .cost-toggle-btn,
-    [data-theme="dark"] .cost-quick-btn,
-    [data-theme="dark"] .cost-other-input {
-      background: var(--surface);
+    [data-theme="dark"] .add-form input[type="number"] {
+      background: var(--bg);
       border-color: var(--border);
       color: var(--text);
     }
-    [data-theme="dark"] .cost-toggle-btn { color: var(--text-muted); }
+    [data-theme="dark"] .cost-toggle-btn,
+    [data-theme="dark"] .cost-quick-btn {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+    [data-theme="dark"] .cost-other-input {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    [data-theme="dark"] .cost-toggle-btn.on,
+    [data-theme="dark"] .cost-quick-btn.on { background: #4f6ef7; border-color: #4f6ef7; color: #fff; }
     [data-theme="dark"] .cost-row label { color: var(--text-muted); }
     [data-theme="dark"] .cost-summary {
       background: var(--surface);
@@ -1161,13 +1186,23 @@
       border-color: var(--border);
       color: var(--text-muted);
     }
+    [data-theme="dark"] .owner-filter-btn.active        { background: #374151; color: #f3f4f6; border-color: #374151; }
+    [data-theme="dark"] .owner-filter-btn.active-zach   { background: #4f6ef7; border-color: #4f6ef7; color: #fff; }
+    [data-theme="dark"] .owner-filter-btn.active-alana  { background: #c0397a; border-color: #c0397a; color: #fff; }
+    [data-theme="dark"] .owner-filter-btn.active-none   { background: #6b7280; border-color: #6b7280; color: #fff; }
     [data-theme="dark"] ul.task-list li { border-bottom-color: var(--border); }
     [data-theme="dark"] ul.task-list li .text { color: var(--text); }
+    [data-theme="dark"] ul.task-list li.done .text { color: #4b5563; }
     [data-theme="dark"] .cost-badge { background: var(--chip-bg); color: var(--text-muted); }
+    [data-theme="dark"] .owner-chip.zach  { background: #1e3a5f; color: #93c5fd; }
+    [data-theme="dark"] .owner-chip.alana { background: #4a0d2e; color: #f9a8d4; }
+    [data-theme="dark"] .cat-chip { filter: brightness(0.85); }
     [data-theme="dark"] .btn-icon { color: #4b5563; }
+    [data-theme="dark"] .btn-icon:hover { color: #818cf8; background: #1e2740; }
     [data-theme="dark"] .footer { color: var(--text-muted); }
     [data-theme="dark"] .footer button { color: #f87171; }
     [data-theme="dark"] .empty { color: #4b5563; }
+    [data-theme="dark"] .modal-backdrop { background: rgba(0,0,0,0.65); }
     [data-theme="dark"] .modal {
       background: var(--surface);
       color: var(--text);
@@ -1182,35 +1217,66 @@
       border-color: var(--border);
       color: var(--text);
     }
-    [data-theme="dark"] .btn-cancel { background: var(--bg); color: var(--text-muted); }
+    [data-theme="dark"] .btn-cancel { background: #374151; color: #e5e7eb; }
+    [data-theme="dark"] .btn-save   { background: #4f6ef7; color: #fff; }
     [data-theme="dark"] .btn-delete-modal { background: #450a0a; color: #fca5a5; }
     [data-theme="dark"] .icon-picker-btn {
       background: var(--bg);
       border-color: var(--border);
     }
     [data-theme="dark"] .icon-picker-btn span { color: var(--text-muted); }
+    [data-theme="dark"] .icon-picker-btn.selected { background: #1e2740; border-color: #4f6ef7; }
+    [data-theme="dark"] .color-swatch.selected { border-color: #f3f4f6; }
     [data-theme="dark"] .cat-rename-input { color: var(--sidebar-text); border-color: var(--sidebar-muted); }
-    /* Dark mode mobile header */
     [data-theme="dark"] .main-header {
       background: var(--surface);
       border-bottom-color: var(--border);
     }
-    [data-theme="dark"] .sync-modal,
     [data-theme="dark"] #sync-modal { background: var(--surface); }
-    [data-theme="dark"] #pantry-input,
-    [data-theme="dark"] #firebase-input {
+    [data-theme="dark"] #firebase-input,
+    [data-theme="dark"] #pantry-input {
       background: var(--bg);
       border-color: var(--border);
       color: var(--text);
+    }
+    [data-theme="dark"] #sync-modal p,
+    [data-theme="dark"] #sync-modal ol,
+    [data-theme="dark"] #sync-modal li { color: var(--text-muted); }
+    [data-theme="dark"] #sync-modal code { background: #374151; color: var(--text); }
+    /* Hardcoded IDs on owner toggle buttons */
+    [data-theme="dark"] #add-owner-zach,  [data-theme="dark"] #edit-owner-zach  { background: #1e3a5f; border-color: #2d5a9e; color: #93c5fd; }
+    [data-theme="dark"] #add-owner-alana, [data-theme="dark"] #edit-owner-alana { background: #4a0d2e; border-color: #8b2252; color: #f9a8d4; }
+    [data-theme="dark"] #add-owner-zach.on,  [data-theme="dark"] #edit-owner-zach.on,
+    [data-theme="dark"] #add-owner-alana.on, [data-theme="dark"] #edit-owner-alana.on {
+      background: #4f6ef7; border-color: #4f6ef7; color: #fff;
     }
 
     /* ── Drag-to-reorder (desktop) ── */
     .cat-list li.drag-over-above { border-top: 2px solid #4f6ef7; }
     .cat-list li.drag-over-below { border-bottom: 2px solid #4f6ef7; }
-    .cat-list li[draggable="true"] { cursor: grab; }
+    .cat-list li[draggable="true"] { cursor: default; }
     .cat-list li.dragging { opacity: 0.4; }
-    /* Arrow buttons hidden on desktop (drag handles are used there instead) */
+    .drag-handle { display: none !important; }
+    /* Arrow buttons hidden on desktop (sidebar manage mode shows them on mobile) */
     .move-btn { display: none; }
+
+    /* ── Heart completion animation ── */
+    @keyframes heartPop {
+      0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+      40%  { transform: scale(1.4) rotate(8deg);  opacity: 1; }
+      65%  { transform: scale(0.9) rotate(-4deg); opacity: 1; }
+      80%  { transform: scale(1.1) rotate(2deg);  opacity: 1; }
+      100% { transform: scale(1)   rotate(0deg);  opacity: 0; }
+    }
+    .heart-burst {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.6rem;
+      line-height: 1;
+      z-index: 9999;
+      animation: heartPop 0.75s ease forwards;
+      transform-origin: center;
+    }
 
     /* Hidden globally; shown only inside mobile media query */
     .mobile-backdrop { display: none; }
@@ -1851,9 +1917,34 @@
 
     function toggleTask(id) {
       const t = state.tasks.find(t => t.id === id);
-      if (t) t.done = !t.done;
+      if (!t) return;
+      t.done = !t.done;
+      if (t.done) {
+        // Find the checkbox element to position the heart near it
+        const cb = document.querySelector(`input[onchange="toggleTask('${id}')"]`);
+        if (cb) burstHeart(cb);
+      }
       save();
       render();
+    }
+
+    function burstHeart(anchor) {
+      const rect = anchor.getBoundingClientRect();
+      const hearts = ['❤️', '🩷', '💕', '💗'];
+      const count = 3 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'heart-burst';
+        el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        const spread = 40;
+        const x = rect.left + rect.width / 2 + (Math.random() - 0.5) * spread;
+        const y = rect.top  + rect.height / 2 + (Math.random() - 0.5) * spread;
+        el.style.left = x + 'px';
+        el.style.top  = y + 'px';
+        el.style.animationDelay = (i * 0.08) + 's';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
     }
 
     function cyclePriority(id) {
@@ -2247,7 +2338,12 @@
 
       let html = `
         <li class="${activeCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">
-          <span class="cat-icon" style="background:#9badd4;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"></span>
+          <span class="all-tasks-icon" style="flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <path d="M7 12l3.5 3.5L17 8"/>
+            </svg>
+          </span>
           <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">All Tasks</span>
           <span class="cat-count">${allCount}</span>
         </li>`;
@@ -2259,7 +2355,6 @@
           ? `<button class="cat-action-btn delete" onclick="event.stopPropagation();deleteCategory('${c.id}')" title="Delete">✕</button>` : '';
         html += `
           <li draggable="true" data-cat-id="${c.id}" class="${activeCategory === c.id ? 'active' : ''}" onclick="selectCategory('${c.id}')">
-            <span class="drag-handle" style="color:#6a7fa8;font-size:0.8rem;padding:0 4px 0 0;cursor:grab;flex-shrink:0" title="Drag to reorder">⠿</span>
             <button class="cat-action-btn move-btn" onclick="event.stopPropagation();moveCat('${c.id}',-1)" title="Move up">▲</button>
             <button class="cat-action-btn move-btn" onclick="event.stopPropagation();moveCat('${c.id}',1)" title="Move down">▼</button>
             ${catIconHTML(c, 'normal')}
@@ -2273,7 +2368,6 @@
           const sc = state.tasks.filter(t => t.category === s.id && !t.done).length;
           html += `
             <li draggable="true" data-cat-id="${s.id}" data-parent-id="${c.id}" class="subcat ${activeCategory === s.id ? 'active' : ''}" onclick="selectCategory('${s.id}')">
-              <span class="drag-handle" style="color:#6a7fa8;font-size:0.8rem;padding:0 4px 0 0;cursor:grab;flex-shrink:0" title="Drag to reorder">⠿</span>
               <button class="cat-action-btn move-btn" onclick="event.stopPropagation();moveCat('${s.id}',-1)" title="Move up">▲</button>
               <button class="cat-action-btn move-btn" onclick="event.stopPropagation();moveCat('${s.id}',1)" title="Move down">▼</button>
               ${catIconHTML(s, 'small')}
@@ -2792,3 +2886,4 @@
   </script>
 </body>
 </html>
+Displaying todo.html.
